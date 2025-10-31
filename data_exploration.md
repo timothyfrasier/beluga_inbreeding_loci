@@ -44,6 +44,12 @@ zgrep -v "^##" 0.01_fully_filtered.vcf.gz | cut -f 1,2,4,5,9,10 | head -n 2
 ```
 ![](figures/sample1.png)
 
+In the first column, labelled `#CHROM`, we can see that the reference genome has not been annotated to the chromosome level (otherwise this column would just have a 1, 2, 3, etc. indicating on which chromosome each variable site is located). Instead, the sites have been mapped to **scaffolds**. In this case, the first site in our VCF file is located at position `30780` on scaffold 1 (`HiC_scaffold_1`) of the reference genome.
+
+We can also see that the reference allele (`REF`) for this site is `T`, and the alternative allele (`ALT`) for this site is `G`. The next column describes the format of the data for each individual. In this case it is `GT:DP:AD:GQ:GC:VAF:VAF1`. We'll walk through what these mean below.
+
+
+
 ## References
 Van der Auwera GA, O'Connor BD (2020) *Genomics in the Cloud: Using Docker, GATK, and WDL in Terra*. O'Reilly, Sebastopol, CA.
 

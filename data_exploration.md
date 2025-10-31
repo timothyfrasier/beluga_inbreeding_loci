@@ -3,7 +3,7 @@
 ## VCF Files
 The VCF file format (variant call format) is one of the many file types that you can use with genomic data. This file is generally quite a bit smaller than other file types because it *only contains data for the variable sites that have been called within a data set*. There is one row per site, and the data for each individual/sample is in a different column. A diagram giving a general picture for a VCF file is shown below (from Van der Auwera & O'Connor 2020).
 
-![fig1](figures/vcf.png)
+![](figures/vcf.png)
 
 A VCF file is a tab-delimited file that has three main parts:    
 	1. A metadata header consisting of many lines that start with `##`;    
@@ -35,14 +35,14 @@ zgrep -v "^##" 0.01_fully_filtered.vcf.gz | head -n 1
 ```
 
 From this, you can see that the first nine columns are information about the data, and then the tenth column onward contain the data for each sample. A screenshot of this is shown below.
-![fig2](figures/columns.png)
+![](figures/columns.png)
 
 
 There is clearly a lot of information in this file, and we will not dive into all of it, but we will take a look at some. We can use the `cut` Unix command to show us some of the columns of the data file. Let's use that to look at some of the key columns, including for the first individual. The command and results are shown below.
 ```
 zgrep -v "^##" 0.01_fully_filtered.vcf.gz | cut -f 1,2,4,5,9,10 | head -n 2
 ```
-![fig3](figures/sample1.png)
+![](figures/sample1.png)
 
 ## References
 Van der Auwera GA, O'Connor BD (2020) *Genomics in the Cloud: Using Docker, GATK, and WDL in Terra*. O'Reilly, Sebastopol, CA.

@@ -48,6 +48,15 @@ In the first column, labelled `#CHROM`, we can see that the reference genome has
 
 We can also see that the reference allele (`REF`) for this site is `T`, and the alternative allele (`ALT`) for this site is `G`. The next column describes the format of the data for each individual. In this case it is `GT:DP:AD:GQ:GC:VAF:VAF1`. We'll walk through what these mean below.
 
+| Data Type | Description | Value for First Sample |
+|-----------|-------------|------------------------|
+| GT | Genotype of the individual at this site | 1/1 or G/G (0 would be the reference) |
+| DP | Read depth at this site for this sample | 9 |
+| AD | Allelic depth. The number of reads supporting each allele | 0,9 |
+| GQ | Genotype quality as a [phred score](https://en.wikipedia.org/wiki/Phred_quality_score) | 26 |
+| GL | Genotype likelihood | -31.13 |
+| VAF | Variant Allele Fraction | -2.05 | 
+
 
 
 ## References

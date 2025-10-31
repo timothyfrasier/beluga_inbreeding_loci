@@ -54,9 +54,39 @@ We can also see that the reference allele (`REF`) for this site is `T`, and the 
 | DP | Read depth at this site for this sample | 9 |
 | AD | Allelic depth. The number of reads supporting each allele | 0,9 |
 | GQ | Genotype quality as a [phred score](https://en.wikipedia.org/wiki/Phred_quality_score) | 26 |
-| GL | Genotype likelihood | -31.13 |
-| VAF | Variant Allele Fraction | -2.05 | 
+| GL | Genotype likelihood (log scale, for genotypes 0/0, 0/1, and 1/1, respectively) | -31.13, -2.05, -0 |
+| VAF | Variant Allele Fraction (proportion of reads that support genotype) | 1 | 
+| VAF1 | Not sure how this differs from above| 1 |
 
+Another important column, which was not shown above, is the `FILTER` column (column 7 of the VCF file), which states whether or not each site passed all of the quality check filters (`PASS`). If not, this column will contain a semi-colon-delimited list of codes for the filters that failed. We can see this with the command below. Not surprisingly, since we are already dealing with a filtered data set, all sites have passed all filters.
+```
+zgrep -v "^##" 0.01_fully_filtered.vcf.gz | cut -f 1-7 | head -n 50
+```
+
+Lastly, the eighth column (title `INFO`) contains a lot of information that is very helpful. We can view this with the command below, with the results shown after that.
+```
+zgrep -v "^##" 0.01_fully_filtered.vcf.gz | cut -f 8 | head -n 10
+```
+
+![](figures/column8.png)
+
+There is a lot of information here! It is all relevant to the **site** (*i.e.,* the characteristics of the site across all samples). The meaning of these values is described below.
+
+| Code | Description | Value for first site |
+|------|-------------|----------------------|
+| NS   | Number of samples with data | 140 |
+| AF   | Frequency of the alternate allele (AC/AN)| 0.282143 |
+| AC   | Allele counts of alternate allele | 79 |
+| AN   | Total number of alleles called | 280 |
+| F_MISSING | Fraction of individuals missing a genotype at this site | 0.0909091 |
+| MAF | Minor allele frequency | 0.282143 |
+| AC_Het | Allele counts heterozygous | 59 |
+| AC_Hom | Allele counts homozygous | 20 |
+| AC_Hemi | Allele counts hemizygous | 0 |
+| HWE | The p-value associated with calculation of Hardy-Weinberg Equilibrium | 0.834402 |
+| ExcHet | How much more heterozygous a site is than expected under HWE | 0.415259 |
+
+That's it. Hopefully now you have a relatively good feel of the data in the VCF file, how it is organized, and how you can view different aspects of it.
 
 
 ## References

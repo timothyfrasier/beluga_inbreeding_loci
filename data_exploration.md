@@ -5,7 +5,12 @@ The VCF file format (variant call format) is one of the many file types that you
 
 ![](figures/vcf.png)
 
+A VCF file is a tab-delimited file that has three main parts:    
+	1. A metadata header consisting of many lines that start with `##`;    
+	2. A header line with the eight mandatory fields and the sample names for those samples that are genotyped; and    
+	3. The data lines, where each line (row) consists of the information for a variant at a particular position and all the individual genotypes for this position.
 
+A helpful video walking through this file format can be found [here](https://youtu.be/EpD2ZHM7Q8Q?si=0oTs1M3Lrc99d29O), and the official document specifying the VCF format can be found [here](https://samtools.github.io/hts-specs/VCFv4.2.pdf).
 
 ## References
 Van der Auwera GA, O'Connor BD (2020) *Genomics in the Cloud: Using Docker, GATK, and WDL in Terra*. O'Reilly, Sebastopol, CA.

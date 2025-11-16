@@ -35,6 +35,7 @@ but show the unzipped file on the screen. Along with the data set name, we can t
 gunzip -c 0.01_fully_filtered.vcf.gz | head -n 30
 ```
 
+
 This shows the first 30 rows of info, where each row begins with ##. To count the number of lines that start with ##, we can use `zgrep` and 
 `-c`, which means to count. For example:
 
@@ -42,11 +43,13 @@ This shows the first 30 rows of info, where each row begins with ##. To count th
 zgrep -c "^##" 0.01_fully_filtered.vcf.gz
 ```
 
+
 To show how many lines **DO NOT** start with ##, we can use `-v`. Below will show the first row (hence 1) that does not start with ##.
 
 ```
 zgrep -v "^##" 0.01_fully_filtered.vcf.gz | head -n 1
 ```
+
 
 Use `cut` to look at just some of the important column headers. For example:
 
@@ -54,19 +57,20 @@ Use `cut` to look at just some of the important column headers. For example:
 zgrep -v "^##" 0.01_fully_filtered.vcf.gz | cut -f 1,2,4,5,9,10 | head -n 2
 ```
 
+
 These columns show:
-  1 -> # chromosome
-  2 -> position
-  3 -> ID
-  4 -> reference allele
-  5 -> alternate allele
-  7 -> filter
-  9 -> format (GT:DP:AD:GQ:GL:VAF:VAF1)
-  10 -> sample
+  - 1 -> # chromosome
+  - 2 -> position
+  - 3 -> ID
+  - 4 -> reference allele
+  - 5 -> alternate allele
+  - 7 -> filter
+  - 9 -> format (GT:DP:AD:GQ:GL:VAF:VAF1)
+  - 10 -> sample
 
 Column 8 is also very useful as it provides a lot of information, such as frequency of the alternate allele, etc.
 
-  *Reminder*: hemizgyous = only one allele at a site
+  - *Reminder*: hemizgyous = only one allele at a site
 
 Use the below code to count the total number of columns in the header, where `^#CHROM` will tell it to only choose
 this row and `cw -w` asks it to count the words (number of columns in this case). Given that there are 9 rows of metadata,
@@ -76,13 +80,15 @@ the total number of rows minus 9 will give you the number of samples.
 zgrep "^#CHROM" 0.01_fully_filtered.vcf.gz | cw -w
 ```
 
+
 To count the number of rows starting with #, use the command below, where `cw -1` asks it to count the number of lines:
 
 ```
 zgrep -v "^#" 0.01_fully_filtered.vcf.gz | wc -l
 ```
 
-Pressing `Ctrl+C` cancels the command that it is processing, for when it gets stuck.
+Pressing `Ctrl+C` cancels the command that it is processing. Use it when command line gets stuck.
+
 
 ## Mortality data
 
@@ -92,8 +98,34 @@ Example of how to count the number of rows where the category for mortality is i
 cut -f 13 beluga_mortality_2021.txt | grep "Infectious" | wc -l
 ```
 
+
 This counts the total number of rows, minus the header (for this data set):
 
 ```
 tail -n +2 beluga_mortality_2021.txt | wc -l
 ```
+
+# PLINK-related
+
+Note: this is a useful site for PLINK flags/commands: https://www.cog-genomics.org/plink/1.9/input#vcf
+
+To learn more about plink flags/commands, use the following code (for some reason on my computer plink commands need to include "./"):
+
+```
+./plink --help
+```
+
+I started by trying to convert the vcf file into plink format. I was at first having issues, but the code below seems to have worked.`Gunzip -c`
+is required for plink since we are giving it a zipped file. `--vcf` specifies that the following commands are to be pulled from the vcf file,
+while `/dev/stdin` tells it to pull from the unzipped file (standard input). `--make-bed` tells it to generate a new PLINK binary fileset (.bed,
+.bim and .fam). `--out` is used to tell it what prefix to name these new files. `--keep-allele-order` is used so that PLINK does not reorganize
+the reference and alternate alleles (very important). Command line output told me to use `--allow-extra-chr` (but not entirely sure about this). 
+
+```
+gunzip 0.01_fully_filtered.vcf.gz | ./plink2 --vcf /dev/stdin \
+  --make-bed \
+  --out converted_data \
+  --keep-allele-order \
+  --allow-extra-chr
+```
+

@@ -128,4 +128,22 @@ gunzip 0.01_fully_filtered.vcf.gz | ./plink2 --vcf /dev/stdin \
   --keep-allele-order \
   --allow-extra-chr
 ```
+***^ using this code results in messed-up .bed data
 
+The code below works the same, except it uses plink2 and does not require `--keep-allele-order` or `--allow-extra-chr` (can choose different prefix name if you like).
+```
+./plink2 --vcf 0.01_fully_filtered.vcf.gz \
+--make-bed \
+--out converted_data
+```
+
+Each file in this PLINK fileset stores different genetic data:
+- **.bim** contains variant (SNP) data (important info here is base-pair coordinate and alt/ref allele)
+- **.fam** contains sample information, with 6 columns as follows:
+  - 1. Family ID
+  - 2. Within-family ID
+  - 3. Parental ID
+  - 4. Maternal ID
+  - 5. Sex code ('1' = male, '2' = female, '0' = unknown)
+  - 6. Phenotype value (-9 or 0 if unknown)
+- **.bed** contains genotype data 

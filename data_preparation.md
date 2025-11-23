@@ -81,7 +81,7 @@ zgrep "^#CHROM" 0.01_fully_filtered.vcf.gz | cw -w
 ```
 
 
-To count the number of rows starting with #, use the command below, where `cw -1` asks it to count the number of lines:
+To count the number of rows that do not start with "#", use the command below, where `cw -1` asks it to count the number of lines:
 
 ```
 zgrep -v "^#" 0.01_fully_filtered.vcf.gz | wc -l
@@ -128,7 +128,6 @@ gunzip 0.01_fully_filtered.vcf.gz | ./plink2 --vcf /dev/stdin \
   --keep-allele-order \
   --allow-extra-chr
 ```
-***^ using this code results in messed-up .bed data
 
 The code below works the same, except it uses plink2 and does not require `--keep-allele-order` or `--allow-extra-chr` (can choose different prefix name if you like).
 ```
@@ -146,4 +145,28 @@ Each file in this PLINK fileset stores different genetic data:
   - 4. Maternal ID
   - 5. Sex code ('1' = male, '2' = female, '0' = unknown)
   - 6. Phenotype value (-9 or 0 if unknown)
-- **.bed** contains genotype data 
+- **.bed** contains genotype data in binary format
+
+
+*Note*: `.pgen` is not exactly equivalent to `.bed`. `.pgen` is slightly more advanced (ex - it can handle multiallelic data). However, for our purposes I think the bfile
+(`.fam`, `.bed`, and `.bim`) files are fine. 
+
+
+## Quality control
+
+Before running commands to filter/quality check, run the below line before and after to count the number of variants and number of individuals/samples. This should tell you 
+if alterations remove data or not. 
+
+```
+wc -l 0.01_ff.bim 
+wc -l 0.01_fully_filtered.fam
+```
+
+Next, we will run the code below. `--geno 0.05` filters out variants with high rates of missing genotypes, while `--mind 0.05` does the same but for samples. Using 0.05 specifies to remove variants or samples
+with missing genotype call rates > 5%. `--hwe 1e-6` filters out all variants which have Hardy-Weinberg equilibrium exact test p-value below the provided threshold. Lastly, `--maf 0.01` filters out all variants 
+with minor allele frequency below the provided threshold. Doing these one at a time, along with `--make-bed` and `--out`, will allow you to observe the effect of these commands on the data set. Example below:
+
+```
+./plink --bfile 0.01_ff --geno 0.05 --make-bed --out qc_data --allow-extra-chr
+```
+

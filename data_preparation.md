@@ -115,11 +115,10 @@ To learn more about plink flags/commands, use the following code (for some reaso
 ./plink --help
 ```
 
-I started by trying to convert the vcf file into plink format. I was at first having issues, but the code below seems to have worked.`Gunzip -c`
-is required for plink since we are giving it a zipped file. `--vcf` specifies that the following commands are to be pulled from the vcf file,
-while `/dev/stdin` tells it to pull from the unzipped file (standard input). `--make-bed` tells it to generate a new PLINK binary fileset (.bed,
-.bim and .fam). `--out` is used to tell it what prefix to name these new files. `--keep-allele-order` is used so that PLINK does not reorganize
-the reference and alternate alleles (very important). Command line output told me to use `--allow-extra-chr` (but not entirely sure about this). 
+
+To convert the vcf file into plink format, use the code below. `Gunzip -c` is required for plink since we are giving it a zipped file. `--vcf` specifies that the following commands are to be pulled from the vcf file, 
+while `/dev/stdin` tells it to pull from the unzipped file (standard input). `--make-bed` tells it to generate a new PLINK binary fileset (.bed, .bim and .fam). `--out` is used to tell it what prefix to name these new files. 
+`--keep-allele-order` is used so that PLINK does not reorganize the reference and alternate alleles (very important). Command line output told me to use `--allow-extra-chr` (but not entirely sure about this). 
 
 ```
 gunzip 0.01_fully_filtered.vcf.gz | ./plink2 --vcf /dev/stdin \
@@ -129,12 +128,14 @@ gunzip 0.01_fully_filtered.vcf.gz | ./plink2 --vcf /dev/stdin \
   --allow-extra-chr
 ```
 
+
 The code below works the same, except it uses plink2 and does not require `--keep-allele-order` or `--allow-extra-chr` (can choose different prefix name if you like).
 ```
 ./plink2 --vcf 0.01_fully_filtered.vcf.gz \
 --make-bed \
 --out converted_data
 ```
+
 
 Each file in this PLINK fileset stores different genetic data:
 - **.bim** contains variant (SNP) data (important info here is base-pair coordinate and alt/ref allele)
@@ -155,12 +156,13 @@ Each file in this PLINK fileset stores different genetic data:
 ## Quality control
 
 Before running commands to filter/quality check, run the below line before and after to count the number of variants and number of individuals/samples. This should tell you 
-if alterations remove data or not. 
+if alterations remove data or not (using `.bim` will give you the number of variants and `.fam` will give you the number of samples). 
 
 ```
 wc -l 0.01_ff.bim 
 wc -l 0.01_fully_filtered.fam
 ```
+
 
 Next, we will run the code below. `--geno 0.05` filters out variants with high rates of missing genotypes, while `--mind 0.05` does the same but for samples. Using 0.05 specifies to remove variants or samples
 with missing genotype call rates > 5%. `--hwe 1e-6` filters out all variants which have Hardy-Weinberg equilibrium exact test p-value below the provided threshold. Lastly, `--maf 0.01` filters out all variants 
@@ -170,3 +172,40 @@ with minor allele frequency below the provided threshold. Doing these one at a t
 ./plink --bfile 0.01_ff --geno 0.05 --make-bed --out qc_data --allow-extra-chr
 ```
 
+
+This can also be completed in one command, and the output will give you how many variants and samples were removed, in addition to what remains:
+
+```
+./plink -bfile 0.01_ff --geno 0.05 --mind 0.05 --hwe 1e-6 --maf 0.01 --make-bed --out qc_data --allow-extra-chr
+```
+
+
+Next, we can check for relatedness using the `king-cutoff` command and a threshold value. The threshold value will be important for what degree of relatedness you want to remove. For our case, we will use first
+degree relatives, equivalent to a threshold value of **0.177**. This command does not automatically remove samples, and therefore requires two commands to first identify samples that should be removed (which are
+saved in a `.king.cutoff.out.id` file), and a subsequent command to actually remove them and create a new set of bfiles. Also, the flag `king-cutoff` requires plink2.
+
+```
+./plink2 --bfile qc_data --make-king-table --king-cutoff 0.177 --out king_cutoff
+./plink2 --bfile qc_data --remove king_cutoff.king.cutoff.out.id --make-bed --out filtered_data
+```
+
+
+So after quality checks, our data is now stored in a set of bfiles with the prefix *filtered_data*.
+
+
+## Analysis
+
+To do an association analysis in PLINK, use the code below. `--bfile` calls all three .fam, .bim, and .bed files with the same prefix. `--pheno` tells plink to read the phenotype from a specific file, in this 
+case: beluga_pheno_sub.phe. `--pheno-name` tells plink which column of phenotype values to pull from within the phenotype file. `--glm` is the flag that will run the association test. It stands for Generalized
+Linear Model, and when the phenotype data is in binary format (1/2/0), will perform a logistic regression (what we want). Following this flag with `allow-no-covars` means it can be run without adding a
+covariate file. This command combined will produce a file labelled: "neonate_test.neonate_test.glm.logistic.hybrid". It contains the test results.
+
+```
+./plink2 --bfile filtered_data --pheno beluga_pheno_sub.phe --pheno-name neonate_test --glm allow-no-covars --allow-extra-chr --out neonate_test
+```
+
+
+Use this code to count how many 0's, 1's and 2's for each phenotype column, where the number after `$` is the column number. 
+```
+awk 'NR>1{print $6}' beluga_pheno.phe | sort | uniq -c
+```

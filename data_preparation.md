@@ -24,8 +24,7 @@ Some useful Git commands include:
 
 # Beginning to look at data
 
-My data is located within **"0.01_fully_filtered.vcf"**. We are using 0.01, which means we have
-99% confidence that each base is correct. 
+The data is located within **"0.01_fully_filtered.vcf"**. We are using 0.01, which means we have 99% confidence that each base is correct. 
 
 To show the first 30 lines within the data frame, we will use `gunzip` or `gzip` and `-c`, which means it will not truly unzip the file, 
 but show the unzipped file on the screen. Along with the data set name, we can then pipe `|` that into the `head` command and specify `-n 30` 
@@ -37,7 +36,7 @@ gunzip -c 0.01_fully_filtered.vcf.gz | head -n 30
 
 
 This shows the first 30 rows of info, where each row begins with ##. To count the number of lines that start with ##, we can use `zgrep` and 
-`-c`, which means to count. For example:
+`-c`. For example:
 
 ```
 zgrep -c "^##" 0.01_fully_filtered.vcf.gz
@@ -72,6 +71,7 @@ Column 8 is also very useful as it provides a lot of information, such as freque
 
   - *Reminder*: hemizgyous = only one allele at a site
 
+
 Use the below code to count the total number of columns in the header, where `^#CHROM` will tell it to only choose
 this row and `cw -w` asks it to count the words (number of columns in this case). Given that there are 9 rows of metadata,
 the total number of rows minus 9 will give you the number of samples.
@@ -92,7 +92,7 @@ Pressing `Ctrl+C` cancels the command that it is processing. Use it when command
 
 ## Mortality data
 
-Example of how to count the number of rows where the category for mortality is infectious disease (*note that row 13 is "Cateogry"*):
+Below is an example of how to count the number of rows, where the category for mortality is infectious disease (*note that row 13 is "Cateogry"*):
 
 ```
 cut -f 13 beluga_mortality_2021.txt | grep "Infectious" | wc -l
@@ -109,16 +109,16 @@ tail -n +2 beluga_mortality_2021.txt | wc -l
 
 Note: this is a useful site for PLINK flags/commands: https://www.cog-genomics.org/plink/1.9/input#vcf
 
-To learn more about plink flags/commands, use the following code (for some reason on my computer plink commands need to include "./"):
+To learn more about PLINK flags/commands, use the following code:
 
 ```
 ./plink --help
 ```
 
 
-To convert the vcf file into plink format, use the code below. `Gunzip -c` is required for plink since we are giving it a zipped file. `--vcf` specifies that the following commands are to be pulled from the vcf file, 
+To convert the vcf file into PLINK format, use the code below. `Gunzip -c` is required for PLINK since we are giving it a zipped file. `--vcf` specifies that the following commands are to be pulled from the vcf file, 
 while `/dev/stdin` tells it to pull from the unzipped file (standard input). `--make-bed` tells it to generate a new PLINK binary fileset (.bed, .bim and .fam). `--out` is used to tell it what prefix to name these new files. 
-`--keep-allele-order` is used so that PLINK does not reorganize the reference and alternate alleles (very important). Command line output told me to use `--allow-extra-chr` (but not entirely sure about this). 
+`--keep-allele-order` is used so that PLINK does not reorganize the reference and alternate alleles (very important). `--allow-extra-chr` is also required if chromosome number is instead given as scaffolds (or non-numeric names).
 
 ```
 gunzip 0.01_fully_filtered.vcf.gz | ./plink2 --vcf /dev/stdin \
@@ -129,7 +129,8 @@ gunzip 0.01_fully_filtered.vcf.gz | ./plink2 --vcf /dev/stdin \
 ```
 
 
-The code below works the same, except it uses plink2 and does not require `--keep-allele-order` or `--allow-extra-chr` (can choose different prefix name if you like).
+The code below works the same, except it uses PLINK 2.0 and does not require `--keep-allele-order` or `--allow-extra-chr` (can choose different prefix name if you like).
+
 ```
 ./plink2 --vcf 0.01_fully_filtered.vcf.gz \
 --make-bed \
@@ -149,5 +150,4 @@ Each file in this PLINK fileset stores different genetic data:
 - **.bed** contains genotype data in binary format
 
 
-*Note*: `.pgen` is not exactly equivalent to `.bed`. `.pgen` is slightly more advanced (ex - it can handle multiallelic data). However, for our purposes I think the bfile
-(`.fam`, `.bed`, and `.bim`) files are fine. 
+*Note*: `.pgen` is not exactly equivalent to `.bed`. `.pgen` is slightly more advanced (ex - it can handle multiallelic data). However, for our purposes bfile (`.fam`, `.bed`, and `.bim`) are fine. 

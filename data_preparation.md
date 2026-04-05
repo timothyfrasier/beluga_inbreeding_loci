@@ -26,8 +26,8 @@ Some useful Git commands include:
 
 The data is located within **"0.01_fully_filtered.vcf"**. We are using 0.01, which means we have 99% confidence that each base is correct. 
 
-To show the first 30 lines within the data frame, we will use `gunzip` or `gzip` and `-c`, which means it will not truly unzip the file, 
-but show the unzipped file on the screen. Along with the data set name, we can then pipe `|` that into the `head` command and specify `-n 30` 
+To show the first 30 lines within the dataframe, we will use `gunzip` or `gzip` and `-c`, which means it will not truly unzip the file, 
+but show the unzipped file on the screen. Along with the dataset name, we can then pipe `|` that into the `head` command and specify `-n 30` 
 (or any number of lines). 
 
 ```
@@ -92,14 +92,14 @@ Pressing `Ctrl+C` cancels the command that it is processing. Use it when command
 
 ## Mortality data
 
-Below is an example of how to count the number of rows, where the category for mortality is infectious disease (*note that row 13 is "Cateogry"*):
+Below is an example of how to count the number of rows, where the category for mortality is infectious disease (*note that column 13 is "Category"*):
 
 ```
 cut -f 13 beluga_mortality_2021.txt | grep "Infectious" | wc -l
 ```
 
 
-This counts the total number of rows, minus the header (for this data set):
+This counts the total number of rows, minus the header (for this dataset):
 
 ```
 tail -n +2 beluga_mortality_2021.txt | wc -l
@@ -118,7 +118,7 @@ To learn more about PLINK flags/commands, use the following code:
 
 To convert the vcf file into PLINK format, use the code below. `Gunzip -c` is required for PLINK since we are giving it a zipped file. `--vcf` specifies that the following commands are to be pulled from the vcf file, 
 while `/dev/stdin` tells it to pull from the unzipped file (standard input). `--make-bed` tells it to generate a new PLINK binary fileset (.bed, .bim and .fam). `--out` is used to tell it what prefix to name these new files. 
-`--keep-allele-order` is used so that PLINK does not reorganize the reference and alternate alleles (very important). `--allow-extra-chr` is also required if chromosome number is instead given as scaffolds (or non-numeric names).
+`--keep-allele-order` is used so that PLINK does not reorganize the reference and alternate alleles (very important). `--allow-extra-chr` is also required if chromosome number is given as scaffolds (or non-numeric names).
 
 ```
 gunzip 0.01_fully_filtered.vcf.gz | ./plink2 --vcf /dev/stdin \
@@ -150,4 +150,4 @@ Each file in this PLINK fileset stores different genetic data:
 - **.bed** contains genotype data in binary format
 
 
-*Note*: `.pgen` is not exactly equivalent to `.bed`. `.pgen` is slightly more advanced (ex - it can handle multiallelic data). However, for our purposes bfile (`.fam`, `.bed`, and `.bim`) are fine. 
+*Note*: `.pgen` is not exactly equivalent to `.bed`. `.pgen` is slightly more advanced (ex - it can handle multiallelic data). However, for our purposes, bfiles (`.fam`, `.bed`, and `.bim`) are fine. 

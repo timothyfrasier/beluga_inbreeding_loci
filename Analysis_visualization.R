@@ -8,7 +8,7 @@ library(tidyverse)
 library(readr)
 library(dplyr)
 
-# Visualizing results of --glm logisitc regression test from PLINK
+# Visualizing results of --glm logistic regression tests from PLINK
 
 # Case 1: Neonate mortality, for allelic comparisons
 neonate_test_allelic <- read_table("neonate_test_allelic.txt") %>% select(CHR, BP, SNP, P) # Read in the data (after renaming and saving as a .txt file)
@@ -17,7 +17,7 @@ neonate_test_allelic <- read_table("neonate_test_allelic.txt") %>% select(CHR, B
 neonate_test_allelic <- read_delim("neonate_test_allelic.txt") %>%
   filter(TEST == "ADD") %>%  # only includes values where the "additive" test was run
   filter(is.finite(P), P > 0) %>% 
-  select(CHR, BP, SNP, P)  # just chooses the four columns which the qqman package uses for Manhattan plots
+  select(CHR, BP, SNP, P)  # chooses the four columns which the qqman package uses for Manhattan plots
 
 neonate_test_allelic = neonate_test_allelic %>% mutate(CHR = case_when(
   CHR == "HiC_scaffold_1" ~ "1",
@@ -52,14 +52,15 @@ manhattan(neonate_test_allelic,
           cex = 0.4, 
           cex.axis = 0.9)
 
+
 # Case 1: Neonate mortality, for genotypic comparisons
 neonate_test_genotypic <- read_table("neonate_test_genotypic.txt") %>% select(CHR, BP, SNP, P) # Read in the data (after renaming and saving as a .txt file)
 
-## Modify data so that it is presented in correct format (scaffold values given as 1,2,3, etc.):
+## Modify data so that it is presented in the correct format (scaffold values given as 1,2,3, etc.):
 neonate_test_genotypic <- read_delim("neonate_test_genotypic.txt") %>%
   filter(TEST == "GENO_2DF") %>%  # only includes values where the genotypic test was run
   filter(is.finite(P), P > 0) %>% 
-  select(CHR, BP, SNP, P)  # just chooses the four columns which the qqman package uses for Manhattan plots
+  select(CHR, BP, SNP, P)  # chooses the four columns which the qqman package uses for Manhattan plots
 
 neonate_test_genotypic = neonate_test_genotypic %>% mutate(CHR = case_when(
   CHR == "HiC_scaffold_1" ~ "1",
@@ -99,11 +100,11 @@ manhattan(neonate_test_genotypic,
 # Case 2: Dystocia, for allelic comparisons
 dystocia_test_allelic <- read_table("dystocia_test_allelic.txt") %>% select(CHR, BP, SNP, P) # Read in the data (after renaming and saving as a .txt file)
 
-## Modify data so that it is presented in correct format (scaffold values given as 1,2,3, etc.):
+## Modify data so that it is presented in the correct format (scaffold values given as 1,2,3, etc.):
 dystocia_test_allelic <- read_delim("dystocia_test_allelic.txt") %>%
   filter(TEST == "ADD") %>%  # only includes values where the "additive" test was run
   filter(is.finite(P), P > 0) %>% 
-  select(CHR, BP, SNP, P)  # just chooses the four columns which the qqman package uses for Manhattan plots
+  select(CHR, BP, SNP, P)  # chooses the four columns which the qqman package uses for Manhattan plots
 
 dystocia_test_allelic = dystocia_test_allelic %>% mutate(CHR = case_when(
   CHR == "HiC_scaffold_1" ~ "1",
@@ -138,14 +139,14 @@ manhattan(dystocia_test_allelic,
           cex = 0.4, 
           cex.axis = 0.9)
 
-# Case 2: Dystocia, for allelic comparisons
+# Case 2: Dystocia, for genotypic comparisons
 dystocia_test_genotypic <- read_table("dystocia_test_genotypic.txt") %>% select(CHR, BP, SNP, P) # Read in the data (after renaming and saving as a .txt file)
 
-## Modify data so that it is presented in correct format (scaffold values given as 1,2,3, etc.):
+## Modify data so that it is presented in the correct format (scaffold values given as 1,2,3, etc.):
 dystocia_test_genotypic <- read_delim("dystocia_test_genotypic.txt") %>%
   filter(TEST == "GENO_2DF") %>%  # only includes values where the genotypic test was run
   filter(is.finite(P), P > 0) %>% 
-  select(CHR, BP, SNP, P)  # just chooses the four columns which the qqman package uses for Manhattan plots
+  select(CHR, BP, SNP, P)  # chooses the four columns which the qqman package uses for Manhattan plots
 
 dystocia_test_genotypic = dystocia_test_genotypic %>% mutate(CHR = case_when(
   CHR == "HiC_scaffold_1" ~ "1",
@@ -182,15 +183,14 @@ manhattan(dystocia_test_genotypic,
 
 
 
-
 # Case 3: Neoplasia, for allelic comparisons
 neoplasia_test_allelic <- read_table("neoplasia_test_allelic.txt") %>% select(CHR, BP, SNP, P) # Read in the data (after renaming and saving as a .txt file)
 
-## Modify data so that it is presented in correct format (scaffold values given as 1,2,3, etc.):
+## Modify data so that it is presented in the correct format (scaffold values given as 1,2,3, etc.):
 neoplasia_test_allelic <- read_delim("neoplasia_test_allelic.txt") %>%
   filter(TEST == "ADD") %>%  # only includes values where the "additive" test was run
   filter(is.finite(P), P > 0) %>% 
-  select(CHR, BP, SNP, P)  # just chooses the four columns which the qqman package uses for Manhattan plots
+  select(CHR, BP, SNP, P)  # chooses the four columns which the qqman package uses for Manhattan plots
 
 neoplasia_test_allelic = neoplasia_test_allelic %>% mutate(CHR = case_when(
   CHR == "HiC_scaffold_1" ~ "1",
@@ -228,11 +228,11 @@ manhattan(neoplasia_test_allelic,
 # Case 3: Neoplasia, for genotypic comparisons
 neoplasia_test_genotypic <- read_table("neoplasia_test_genotypic.txt") %>% select(CHR, BP, SNP, P) # Read in the data (after renaming and saving as a .txt file)
 
-## Modify data so that it is presented in correct format (scaffold values given as 1,2,3, etc.):
+## Modify data so that it is presented in the correct format (scaffold values given as 1,2,3, etc.):
 neoplasia_test_genotypic <- read_delim("neoplasia_test_genotypic.txt") %>%
   filter(TEST == "GENO_2DF") %>%  # only includes values where the genotypic test was run
   filter(is.finite(P), P > 0) %>% 
-  select(CHR, BP, SNP, P)  # just chooses the four columns which the qqman package uses for Manhattan plots
+  select(CHR, BP, SNP, P)  # chooses the four columns which the qqman package uses for Manhattan plots
 
 neoplasia_test_genotypic = neoplasia_test_genotypic %>% mutate(CHR = case_when(
   CHR == "HiC_scaffold_1" ~ "1",
@@ -268,17 +268,14 @@ manhattan(neoplasia_test_genotypic,
           cex.axis = 0.9)
 
 
-
-
-
 # Case 4: Infection, for allelic comparisons
-neoplasia_test_allelic <- read_table("neoplasia_test_allelic.txt") %>% select(CHR, BP, SNP, P) # Read in the data (after renaming and saving as a .txt file)
+infection_test_allelic <- read_table("infection_test_nofilter_allelic.txt") %>% select(CHR, BP, SNP, P) # Read in the data (after renaming and saving as a .txt file)
 
-## Modify data so that it is presented in correct format (scaffold values given as 1,2,3, etc.):
+## Modify data so that it is presented in the correct format (scaffold values given as 1,2,3, etc.):
 infection_test_allelic <- read_delim("infection_test_allelic.txt") %>%
   filter(TEST == "ADD") %>%  # only includes values where the "additive" test was run
   filter(is.finite(P), P > 0) %>% 
-  select(CHR, BP, SNP, P)  # just chooses the four columns which the qqman package uses for Manhattan plots
+  select(CHR, BP, SNP, P)  # chooses the four columns which the qqman package uses for Manhattan plots
 
 infection_test_allelic = infection_test_allelic %>% mutate(CHR = case_when(
   CHR == "HiC_scaffold_1" ~ "1",
@@ -316,11 +313,11 @@ manhattan(infection_test_allelic,
 # Case 4: Infection, for genotypic comparisons
 infection_test_genotypic <- read_table("infection_test_genotypic.txt") %>% select(CHR, BP, SNP, P) # Read in the data (after renaming and saving as a .txt file)
 
-## Modify data so that it is presented in correct format (scaffold values given as 1,2,3, etc.):
+## Modify data so that it is presented in the correct format (scaffold values given as 1,2,3, etc.):
 infection_test_genotypic <- read_delim("infection_test_genotypic.txt") %>%
   filter(TEST == "GENO_2DF") %>%  # only includes values where the genotypic test was run
   filter(is.finite(P), P > 0) %>% 
-  select(CHR, BP, SNP, P)  # just chooses the four columns which the qqman package uses for Manhattan plots
+  select(CHR, BP, SNP, P)  # chooses the four columns which the qqman package uses for Manhattan plots
 
 infection_test_genotypic = infection_test_genotypic %>% mutate(CHR = case_when(
   CHR == "HiC_scaffold_1" ~ "1",
@@ -348,9 +345,11 @@ infection_test_genotypic = infection_test_genotypic %>% mutate(CHR = case_when(
 infection_test_genotypic$CHR <- as.numeric(infection_test_genotypic$CHR)
 
 
-## Produce Manhattan plot
+## Produce a Manhattan plot
 manhattan(infection_test_genotypic,
           xlab = "HiC Scaffold",
           ylim = c(0, 10), 
           cex = 0.4, 
           cex.axis = 0.9)
+
+

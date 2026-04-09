@@ -4,6 +4,79 @@
 ###############################
 library(data.table)
 
+#---------------------------#
+# Install required packages #
+#---------------------------#
+
+install.packages("devtools", dependencies = TRUE)
+install.packages("curl", dependencies = TRUE)
+install.packages("httr", dependencies = TRUE)
+install.packages("doParallel", dependencies = TRUE)
+install.packages("foreach", dependencies = TRUE)
+install.packages("fastcluster", dependencies = TRUE)
+install.packages("Rcpp", dependencies = TRUE)
+install.packages("RcppEigen", dependencies = TRUE)
+install.packages("data.table", dependencies = TRUE)
+install.packages("corrplot", dependencies = TRUE)
+install.packages("heatmap3", dependencies = TRUE)
+install.packages("flashClust", dependencies = TRUE)
+install.packages("bigmemory", dependencies = TRUE)
+install.packages("ggplot2", dependencies = TRUE)
+
+
+#-------------------------------#
+# Install BioConductor Packages #         
+#-------------------------------#
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("impute", force=TRUE) # This one takes a long time, changed, output asked me to add force=TRUE
+BiocManager::install("preprocessCore", force=TRUE)
+BiocManager::install("GO.db", force=TRUE)
+BiocManager::install("AnnotationDbi", force=TRUE) # changed, output asked me to add force=TRUE
+
+install.packages("WGCNA", dependencies = TRUE)
+
+library("devtools")
+install_github("QSG-Group/WISH", force=TRUE)
+######################
+
+### Installing devtools
+install.packages(c("devtools","curl", "httr"))
+
+### Install the rest of the dependencies
+install.packages(c("doParallel", "foreach","fastcluster", "Rcpp", "RcppEigen", "data.table", "corrplot", "heatmap3", "flashClust", "bigmemory", "parallel", "ggplot2"))
+
+### Install WISH
+source("https://install-github.me/QSG-Group/WISH")
+# or
+library("devtools")
+install_github("QSG-Group/WISH")
+
+# Install required packages
+install.packages("BiocManager")
+BiocManager::install(c(
+  "AnnotationDbi",
+  "GO.db",
+  "preprocessCore",
+  "impute"
+), force=TRUE)
+install.packages("WGCNA")
+install.packages("devtools")
+library(devtools)
+library(WISH)
+install.packages("remotes")
+remotes::install_github("cran/Epistasis", force=TRUE)
+install.packages("WGCNA")
+library(WGCNA)
+
+install.packages("epistasis")
+library(epistasis) ## 
+
+devtools::install_github("QSG-Group/WISH", force=TRUE)
+library(data.table)
+
+
 #------------------#
 # Read in Data     #
 #------------------#

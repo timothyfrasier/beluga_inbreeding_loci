@@ -2,8 +2,8 @@
 
 ## Quality control
 
-Before running commands to filter/quality check, run the below lines before and after to count the number of variants and number of individuals/samples. This should tell you 
-if alterations remove data or not (using `.bim` will give you the number of variants and `.fam` will give you the number of samples). 
+Before running commands to filter/quality check the data, run the lines below before and after filtering to count the number of variants and number of individuals/samples. This should tell you 
+if commands remove any data or not (using `.bim` will give you the number of variants and `.fam` will give you the number of samples). 
 
 ```
 wc -l 0.01_ff.bim 
@@ -11,7 +11,7 @@ wc -l 0.01_fully_filtered.fam
 ```
 
 
-Next, run the code below. `--geno 0.05` filters out variants with high rates of missing genotypes greater than 5%. `--hwe 1e-6` filters out all variants which have Hardy-Weinberg equilibrium exact test p-values below the provided threshold. 
+Next, run the code below. `--geno 0.05` filters out variants with a missing genotype call rate greater than 5%. `--hwe 1e-6` filters out all variants which have Hardy-Weinberg equilibrium exact test p-values below the provided threshold (1e-6). 
 Lastly, `--maf 0.01` filters out all variants with a minor allele frequency below the provided threshold (1%). This can be completed in one command, along with `--make-bed` and `--out`, and the output will give you how many variants and samples were removed, 
 in addition to what remains:
 
@@ -34,10 +34,9 @@ After quality checks, the data is now stored in a set of bfiles with the prefix 
 
 
 ## Aligning phenotype mortality data
-After filtering has been completed and sites/samples have been removed, the code below can be run in Rstudio to align/reduce the phenotype data file to match genetic data. Phenotype data will now be stored as *pheno_data.phe*. 
+After filtering has been completed and sites/samples have been removed, the code below can be run in Rstudio to align/reduce the phenotype data file to match the genotype data. Phenotype data will now be stored as *pheno_data.phe*. 
 
 ```
-# To make subet of filtered .fam file to match the .phe file
 fam <- read.table("filtered_data.fam")
 phe <- read.table("pheno_data.phe", header=TRUE)
 

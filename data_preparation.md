@@ -19,23 +19,22 @@ notation like this: CO<sub>2</sub>.
 
 Some useful Git commands include:
 - `git status` to list recent files that have not yet been committed.
-- ` git add` to add new files.
+- `git add` to add new files.
 - `git commit` to commit these files to Git hub.
 
 # Beginning to look at data
 
 The data is located within **"0.01_fully_filtered.vcf"**. We are using 0.01, which means we have 99% confidence that each base is correct. 
 
-To show the first 30 lines within the dataframe, we will use `gunzip` or `gzip` and `-c`, which means it will not truly unzip the file, 
-but show the unzipped file on the screen. Along with the dataset name, we can then pipe `|` that into the `head` command and specify `-n 30` 
-(or any number of lines). 
+To show the first 30 lines of the file, we will use `gunzip` or `gzip` and `-c`, which means it will not truly unzip the file, 
+but show the unzipped file on the screen. We can then pipe `|` that into the `head` command and specify `-n 30` (or any number of lines). 
 
 ```
 gunzip -c 0.01_fully_filtered.vcf.gz | head -n 30
 ```
 
 
-This shows the first 30 rows of info, where each row begins with ##. To count the number of lines that start with ##, we can use `zgrep` and 
+This shows the first 30 rows of information, where each row begins with ##. To count the number of lines that start with ##, we can use `zgrep` and 
 `-c`. For example:
 
 ```
@@ -43,7 +42,7 @@ zgrep -c "^##" 0.01_fully_filtered.vcf.gz
 ```
 
 
-To show how many lines **DO NOT** start with ##, we can use `-v`. Below will show the first row (hence 1) that does not start with ##.
+To show how many lines **DO NOT** start with ##, we can use `-v`. Below will show the first row (hence `1`) that does not start with ##.
 
 ```
 zgrep -v "^##" 0.01_fully_filtered.vcf.gz | head -n 1
@@ -69,25 +68,25 @@ These columns show:
 
 Column 8 is also very useful as it provides a lot of information, such as frequency of the alternate allele, etc.
 
-  - *Reminder*: hemizgyous = only one allele at a site
+  - *Reminder*: hemizygous = only one allele at a site
 
 
 Use the below code to count the total number of columns in the header, where `^#CHROM` will tell it to only choose
-this row and `cw -w` asks it to count the words (number of columns in this case). Given that there are 9 rows of metadata,
+this row and `wc -w` asks it to count the words (number of columns in this case). Given that there are 9 rows of metadata,
 the total number of rows minus 9 will give you the number of samples.
 
 ```
-zgrep "^#CHROM" 0.01_fully_filtered.vcf.gz | cw -w
+zgrep "^#CHROM" 0.01_fully_filtered.vcf.gz | wc -w
 ```
 
 
-To count the number of rows that do not start with "#", use the command below, where `cw -1` asks it to count the number of lines:
+To count the number of rows that do not start with "#", use the command below, where `wc -1` asks it to count the number of lines:
 
 ```
 zgrep -v "^#" 0.01_fully_filtered.vcf.gz | wc -l
 ```
 
-Pressing `Ctrl+C` cancels the command that it is processing. Use it when command line gets stuck.
+Pressing `Ctrl+C` cancels the command currently being processed. Use it when command line gets stuck.
 
 
 ## Mortality data
@@ -99,7 +98,7 @@ cut -f 13 beluga_mortality_2021.txt | grep "Infectious" | wc -l
 ```
 
 
-This counts the total number of rows, minus the header (for this dataset):
+This counts the total number of rows, excluding the header (for this dataset):
 
 ```
 tail -n +2 beluga_mortality_2021.txt | wc -l
